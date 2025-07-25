@@ -1,5 +1,41 @@
 # L.Path.Drag
 
+Repackaged / refactored for Leaflet 1.9.4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Archive
+
 [![npm version](https://badge.fury.io/js/leaflet-path-drag.svg)](http://badge.fury.io/js/leaflet-path-drag)
 
 Drag handler for [Leaflet](https://github.com/leaflet/leaflet) vector features.

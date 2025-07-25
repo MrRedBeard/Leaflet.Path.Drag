@@ -1,29 +1,25 @@
 {
   "name": "leaflet-path-drag",
-  "type": "module",
-  "version": "1.9.5",
+  "version": "2.0.0",
   "description": "Drag functionality for Leaflet vector layers",
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
-  "browser": "dist/index.js",
-  "unpkg": "dist/index.js",
-  "jsdelivr": "dist/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "files": [
-    "dist",
-    "src/**/*.js"
-  ],
   "scripts": {
-    "start": "vite -c example/vite.config.ts",
-    "lint": "eslint ./src/*.mjs",
-    "docs": "vite build -c example/vite.config.ts",
-    "build": "npm run lint && vite build",
-    "release": "git push origin master && git checkout gh-pages && git merge master && git push origin gh-pages && git checkout master && npm publish"
+    "build": "rollup -c rollup.config.esm.js && rollup -c rollup.config.iife.js",
+    "build:esm": "rollup -c rollup.config.esm.js"
+  },
+  "type": "module",
+  "main": "./dist/leaflet_path_drag.iife.js",
+  "exports": {
+    "import": "./dist/leaflet_path_drag.iife.js"
+  },
+  "file": "dist/leaflet_path_drag.iife.js",
+  "files": [
+    "dist/",
+    "leaflet-path-drag.js"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrRedBeard/Leaflet.Path.Drag.git"
   },
   "keywords": [
     "leaflet",
@@ -32,40 +28,22 @@
     "drag",
     "polygon"
   ],
-  "author": "Alexander Milevski <info@w8r.name>",
+  "author": "MrRedBeard and Alexander Milevski <info@w8r.name>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/w8r/Leaflet.Path.Drag.git"
-  },
   "bugs": {
-    "url": "https://github.com/w8r/Leaflet.Path.Drag/issues"
+    "url": "https://github.com/MrRedBeard/Leaflet.Path.Drag/issues"
   },
-  "prettier": {
-    "singleQuote": true
+  "homepage": "https://github.com/MrRedBeard/Leaflet.Path.Drag/",
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "vite": "^7.0.4"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^10.1.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babelify": "^8.0.0",
-    "browserify": "^14.4.0",
-    "eslint": "^6.8.0",
-    "faucet": "0.0.1",
-    "leaflet": "^1.9.4",
-    "prosthetic-hand": "^1.3.1",
-    "smokestack": "^3.6.0",
-    "tap-spec": "^5.0.0",
-    "tap-status": "^1.0.1",
-    "tape": "^5.5.3",
-    "tape-run": "^10.0.0",
-    "uglify-js": "^3.0.21",
-    "vite": "^5.1.3"
-  },
-  "directories": {
-    "doc": "docs",
-    "example": "example",
-    "test": "test"
-  },
-  "homepage": "https://github.com/w8r/Leaflet.Path.Drag#readme"
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "rollup": "^4.45.0",
+    "rollup-plugin-node-polyfills": "^0.2.1"
+  }
 }

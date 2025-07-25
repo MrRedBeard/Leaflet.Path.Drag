@@ -199,7 +199,8 @@ Handler.PathDrag = Handler.extend(
         this._startPoint.y = y;
 
         this._path.fire('predrag', evt);
-        this._path._transform(this._matrix);
+        //this._path._transform(this._matrix);
+        L.SVG.transformPath(this, this._matrix);
         this._path.fire('drag', evt);
       }
     },
@@ -217,7 +218,8 @@ Handler.PathDrag = Handler.extend(
         this._transformPoints(this._matrix);
         this._path._updatePath();
         this._path._project();
-        this._path._transform(null);
+        L.SVG.transformPath(this, this._matrix);
+        //this._path._transform(this._matrix);
 
         DomEvent.stop(evt);
       }
