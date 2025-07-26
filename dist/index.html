@@ -30,8 +30,8 @@
     leaflet_path_drag.LeafletPathDrag.enable();
 
     const map = (window.map = new L.Map('map', {
-    //renderer: L.svg(),
-    preferCanvas: false // Ensure SVG is preferred
+        // renderer: L.svg(),
+        // preferCanvas: false // Ensure SVG is preferred
     }).setView([22.42658, 114.1952], 11));
 
     // const renderer = new L.Canvas();
@@ -92,7 +92,7 @@
     }
     )
     .addTo(map)
-    .bindPopup('L.Polygon');
+    //.bindPopup('L.Polygon');
 
     polygon.makeDraggable();
 

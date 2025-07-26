@@ -38,6 +38,25 @@ polygon
 ```javascript
 var polygon = new L.Polygon([...], { draggable: true }).addTo(map);
 polygon.dragging.enable();
+
+polygon.makeDraggable();
+
+polygon
+    .on('dragstart', (e) => 
+    {
+        console.log('start', e)
+    })
+    .on('drag', (e) => 
+    {
+        console.log('drag', e)
+    })
+    .on('dragend', (e) =>
+    {
+        console.log('end', e)
+    });
+```
+
+```javascript
 polygon.dragging.disable();
 ```
 
