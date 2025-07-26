@@ -36,7 +36,7 @@ polygon
 ### Enable/disable dragging
 
 ```javascript
-var polygon = new L.Polygon([...], { draggable: true }).addTo(map);
+var polygon = new L.Polygon([...], { draggable: true, interactive: true }).addTo(map);
 polygon.dragging.enable();
 
 polygon.makeDraggable();
