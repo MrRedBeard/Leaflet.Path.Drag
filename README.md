@@ -19,13 +19,25 @@ VML matrix transform tested in IE8, it has rendering glitches, but what can you 
 
 ## Usage
 
+### esm
+```npm install github:MrRedBeard/Leaflet.Path.Drag```
+
+```JavaScript 
+import LeafletPathDrag from 'leaflet-path-drag';
+```
+
+
+### iife
+
 ```javascript
-<script src="path/to/leaflet/"></script>
-<script src="path/to/L.Path.Drag.js"></script>
+<script src="path/to/leaflet_path_drag.iife.js"></script>
 ...
 LeafletPathDrag.enable();
+```
 
-// Initialize Leaflet
+### Initialize Leaflet
+
+```javascript
 
 var polygon = new L.Polygon([...], { color: '#f00', draggable: true, interactive: true }).addTo(map);
 // you can use the drag events just like with markers
@@ -88,7 +100,7 @@ Fired once when the user begins dragging a shape.
 ##### Example
 
 ```javascript
-polyline.on('dragstart', function (e)
+polygon.on('dragstart', function (e)
 {
   console.log('Drag started', e);
 });
@@ -133,7 +145,7 @@ Fired once at the end of a drag operation. Contains a `distance` field that esti
 ##### Example
 
 ```javascript
-polyline.on('dragend', function (e)
+polygon.on('dragend', function (e)
 {
   console.log('Drag complete. Distance:', e.distance);
 });
