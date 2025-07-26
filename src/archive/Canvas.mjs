@@ -37,7 +37,8 @@ Canvas.include({
    * @param  {L.Path}         layer
    * @param  {Array.<Number>} matrix
    */
-  transformPath: function (layer, matrix) {
+  transformPath: function (layer, matrix)
+  {
     let copy = this._containerCopy;
     const ctx = this._ctx;
     let copyCtx;
@@ -46,7 +47,8 @@ Canvas.include({
     const size = bounds.getSize();
     const pos = bounds.min;
 
-    if (!copy) {
+    if (!copy)
+    {
       // get copy of all rendered layers
       copy = this._containerCopy = document.createElement('canvas');
       copyCtx = copy.getContext('2d');
