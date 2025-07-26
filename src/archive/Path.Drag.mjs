@@ -22,10 +22,23 @@ const MOVE = {
   MSPointerDown: 'touchmove',
 };
 
-function distance(a, b) {
+function distance(a, b)
+{
   const dx = a.x - b.x;
   const dy = a.y - b.y;
   return Math.sqrt(dx * dx + dy * dy);
+}
+
+function ensureTransformPath(renderer)
+{
+  if (renderer && typeof renderer.transformPath !== 'function')
+  {
+    renderer.transformPath = function (layer, matrix)
+    {
+      if (!layer || !layer._path || !Array.isArray(matrix)) return;
+      layer._path.setAttribute('transform', 'matrix(' + matrix.join(' ') + ')');
+    };
+  }
 }
 
 /**
@@ -34,7 +47,8 @@ function distance(a, b) {
  * @extends {L.Handler}
  */
 Handler.PathDrag = Handler.extend(
-  /** @lends  L.Path.Drag.prototype */ {
+  /** @lends  L.Path.Drag.prototype */
+{
     statics: {
       DRAGGING_CLS: 'leaflet-path-draggable',
     },
@@ -43,7 +57,8 @@ Handler.PathDrag = Handler.extend(
      * @param  {L.Path} path
      * @constructor
      */
-    initialize: function (path) {
+    initialize: function (path)
+    {
       /**
        * @type {L.Path}
        */
@@ -75,14 +90,16 @@ Handler.PathDrag = Handler.extend(
     /**
      * Enable dragging
      */
-    addHooks: function () {
+    addHooks: function ()
+    {
       this._path.on('mousedown', this._onDragStart, this);
 
       this._path.options.className = this._path.options.className
         ? this._path.options.className + ' ' + Handler.PathDrag.DRAGGING_CLS
         : Handler.PathDrag.DRAGGING_CLS;
 
-      if (this._path._path) {
+      if (this._path._path)
+      {
         DomUtil.addClass(this._path._path, Handler.PathDrag.DRAGGING_CLS);
       }
     },
@@ -90,14 +107,16 @@ Handler.PathDrag = Handler.extend(
     /**
      * Disable dragging
      */
-    removeHooks: function () {
+    removeHooks: function ()
+    {
       this._path.off('mousedown', this._onDragStart, this);
 
       this._path.options.className = this._path.options.className.replace(
         new RegExp('\\s+' + Handler.PathDrag.DRAGGING_CLS),
         ''
       );
-      if (this._path._path) {
+      if (this._path._path)
+      {
         DomUtil.removeClass(this._path._path, Handler.PathDrag.DRAGGING_CLS);
       }
     },
@@ -105,7 +124,8 @@ Handler.PathDrag = Handler.extend(
     /**
      * @return {Boolean}
      */
-    moved: function () {
+    moved: function ()
+    {
       return this._path._dragMoved;
     },
 
@@ -113,19 +133,19 @@ Handler.PathDrag = Handler.extend(
      * Start drag
      * @param  {L.MouseEvent} evt
      */
-    _onDragStart: function (evt) {
+    _onDragStart: function (evt)
+    {
+      DomEvent.stop(evt.originalEvent);
+
       const eventType = evt.originalEvent._simulated
         ? 'touchstart'
         : evt.originalEvent.type;
-
-      console.log({ eventType });
 
       this._mapDraggingWasEnabled = false;
       this._startPoint = evt.containerPoint.clone();
 
       this._dragStartPoint = evt.containerPoint.clone();
       this._matrix = [1, 0, 0, 1, 0, 0];
-      DomEvent.stop(evt.originalEvent);
 
       DomUtil.addClass(this._path._renderer._container, 'leaflet-interactive');
       DomEvent.on(document, MOVE[eventType], this._onDrag, this).on(
@@ -137,7 +157,8 @@ Handler.PathDrag = Handler.extend(
 
       //L.DomEvent.disableClickPropagation(this._path._renderer._container);
 
-      if (this._path._map.dragging.enabled()) {
+      if (this._path._map.dragging.enabled())
+      {
         // I guess it's required because mousdown gets simulated with a delay
         //this._path._map.dragging._draggable._onUp(evt);
 
@@ -146,7 +167,8 @@ Handler.PathDrag = Handler.extend(
       }
       this._path._dragMoved = false;
 
-      if (this._path._popup) {
+      if (this._path._popup)
+      {
         // that might be a case on touch devices as well
         this._path._popup.close();
       }
@@ -158,7 +180,8 @@ Handler.PathDrag = Handler.extend(
      * Dragging
      * @param  {L.MouseEvent} evt
      */
-    _onDrag: function (evt) {
+    _onDrag: function (evt)
+    {
       DomEvent.stop(evt);
 
       const first =
@@ -166,10 +189,12 @@ Handler.PathDrag = Handler.extend(
       const containerPoint = this._path._map.mouseEventToContainerPoint(first);
 
       // skip taps
-      if (evt.type === 'touchmove' && !this._path._dragMoved) {
+      if (evt.type === 'touchmove' && !this._path._dragMoved)
+      {
         const totalMouseDragDistance =
           this._dragStartPoint.distanceTo(containerPoint);
-        if (totalMouseDragDistance <= this._path._map.options.tapTolerance) {
+        if (totalMouseDragDistance <= this._path._map.options.tapTolerance)
+        {
           return;
         }
       }
@@ -181,8 +206,10 @@ Handler.PathDrag = Handler.extend(
       const dy = y - this._startPoint.y;
 
       // Send events only if point was moved
-      if (dx || dy) {
-        if (!this._path._dragMoved) {
+      if (dx || dy)
+      {
+        if (!this._path._dragMoved)
+        {
           this._path._dragMoved = true;
           this._path.options.interactive = false;
           this._path._map.dragging._draggable._moved = true;
@@ -199,8 +226,20 @@ Handler.PathDrag = Handler.extend(
         this._startPoint.y = y;
 
         this._path.fire('predrag', evt);
-        //this._path._transform(this._matrix);
-        L.SVG.transformPath(this, this._matrix);
+
+        //this._renderer.transformPath(this._path, this._matrix);
+        // ensureTransformPath(this._path._renderer);
+        //this._path._renderer.transformPath(this._path, this._matrix);
+        // if (this._path._renderer?.transformPath)
+        // {
+        //   this._path._renderer.transformPath(this._path, this._matrix);
+        // }
+        // else
+        // {
+        //   console.warn('Renderer does not support transformPath');
+        // }
+        this._path._renderer.transformPath(this._path, this._matrix);
+
         this._path.fire('drag', evt);
       }
     },
@@ -218,8 +257,9 @@ Handler.PathDrag = Handler.extend(
         this._transformPoints(this._matrix);
         this._path._updatePath();
         this._path._project();
-        L.SVG.transformPath(this, this._matrix);
-        //this._path._transform(this._matrix);
+        //this._path._renderer.transformPath(this._path, this._matrix);
+        ensureTransformPath(this._path._renderer);
+        this._path._renderer.transformPath(this._path, this._matrix);
 
         DomEvent.stop(evt);
       }

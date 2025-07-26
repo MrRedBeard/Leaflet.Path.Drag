@@ -1,4 +1,3 @@
-/*! LeafletPathDrag v2.0.0 */
 /**
  * LeafletPathDrag
  * https://github.com/MrRedBeard/Leaflet.Path.Drag
@@ -8,7 +7,7 @@
  *
  * @class LeafletPathDrag
  */
-class LeafletPathDrag
+export class LeafletPathDrag
 {
   /**
    * Apply all patches and extend Leaflet classes
@@ -515,6 +514,3 @@ class LeafletPathDrag
     });
   }
 }
-
-export { LeafletPathDrag };
-//# sourceMappingURL=leaflet_path_drag.esm.js.map
