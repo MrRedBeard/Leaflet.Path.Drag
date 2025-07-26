@@ -1,6 +1,6 @@
 {
   "name": "leaflet-path-drag",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Drag functionality for Leaflet vector layers",
   "scripts": {
     "build": "npm run build:iife && npm run build:esm && npm run build:umd",

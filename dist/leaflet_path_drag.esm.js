@@ -1,4 +1,4 @@
-/*! LeafletPathDrag v2.0.1 */
+/*! LeafletPathDrag v2.0.2 */
 /**
  * LeafletPathDrag
  * https://github.com/MrRedBeard/Leaflet.Path.Drag
