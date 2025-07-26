@@ -5,7 +5,8 @@ import nodePolyfills from 'rollup-plugin-node-polyfills';
 import alias from '@rollup/plugin-alias';
 import pkg from './package.json' assert { type: 'json' };
 
-export default {
+export default
+{
   input: 'src/index.js',
   output: {
     file: 'dist/leaflet_path_drag.esm.js',
@@ -19,7 +20,8 @@ export default {
     },
   },
   plugins: [
-     alias({
+    alias(
+    {
       entries: [
         { find: 'events', replacement: 'rollup-plugin-node-polyfills/polyfills/events.js' }
       ]

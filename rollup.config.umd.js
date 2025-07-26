@@ -1,3 +1,5 @@
+// rollup.config.umd.js
+
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
@@ -8,16 +10,16 @@ export default
 {
   input: 'src/index.js',
   output: {
-    file: 'dist/leaflet_path_drag.iife.js',
-    format: 'iife',
-    name: 'leaflet_path_drag',
+    file: 'dist/leaflet_path_drag.umd.js',
+    format: 'umd',
+    name: 'leaflet_path_drag', // global name for UMD consumers
     banner: `/*! LeafletPathDrag v${pkg.version} */`,
     sourcemap: true,
     inlineDynamicImports: true,
     globals:
     {
       leaflet: 'L'
-    },
+    }
   },
   plugins: [
     resolve({ browser: true, preferBuiltins: false }),
@@ -28,5 +30,6 @@ export default
     }),
     json(),
     polyfills()
-  ]
+  ],
+  external: ['leaflet']
 };

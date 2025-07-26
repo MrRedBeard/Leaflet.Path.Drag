@@ -1,6 +1,9 @@
 /*! LeafletPathDrag v2.0.1 */
-var leaflet_path_drag = (function (exports) {
-  'use strict';
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.leaflet_path_drag = {}));
+})(this, (function (exports) { 'use strict';
 
   /**
    * LeafletPathDrag
@@ -533,7 +536,5 @@ var leaflet_path_drag = (function (exports) {
 
   exports.LeafletPathDrag = LeafletPathDrag;
 
-  return exports;
-
-})({});
-//# sourceMappingURL=leaflet_path_drag.iife.js.map
+}));
+//# sourceMappingURL=leaflet_path_drag.umd.js.map

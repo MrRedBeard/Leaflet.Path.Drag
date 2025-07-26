@@ -1,4 +1,4 @@
-/*! LeafletPathDrag v2.0.0 */
+/*! LeafletPathDrag v2.0.1 */
 /**
  * LeafletPathDrag
  * https://github.com/MrRedBeard/Leaflet.Path.Drag
@@ -24,37 +24,45 @@ class LeafletPathDrag
       console.warn('LeafletPathDrag may not be compatible with Leaflet < 1.7');
     }
 
+    // ensures only patched once
+    if (LeafletPathDrag._enabled) return;
+    LeafletPathDrag._enabled = true;
+
     const { Path, Handler, DomEvent, DomUtil, Util, Browser, svg, Canvas, SVG, point, LatLngBounds } = L;
 
     /**
      * Patch SVG renderer to support transformPath
+     * (if) ensures only patched once
      */
-    SVG.include(
+    if (SVG?.include && typeof SVG.include === 'function')
     {
-      /**
-       * Applies an SVG matrix transform to the path
-       * @param {L.Path} layer
-       * @param {number[]} matrix - 2D transform matrix (6 elements)
-       */
-      transformPath(layer, matrix)
+      SVG.include(
       {
-        if(layer && layer._path && Array.isArray(matrix))
+        /**
+         * Applies an SVG matrix transform to the path
+         * @param {L.Path} layer
+         * @param {number[]} matrix - 2D transform matrix (6 elements)
+         */
+        transformPath(layer, matrix)
         {
-          layer._path.setAttributeNS(null, 'transform', `matrix(${matrix.join(' ')})`);
-        }
-      },
-      /**
-       * Removes transform from an SVG path
-       * @param {L.Path} layer
-       */
-      _resetTransformPath(layer)
-      {
-        if(layer?._path)
+          if(layer && layer._path && Array.isArray(matrix))
+          {
+            layer._path.setAttributeNS(null, 'transform', `matrix(${matrix.join(' ')})`);
+          }
+        },
+        /**
+         * Removes transform from an SVG path
+         * @param {L.Path} layer
+         */
+        _resetTransformPath(layer)
         {
-          layer._path.removeAttribute('transform');
+          if(layer?._path)
+          {
+            layer._path.removeAttribute('transform');
+          }
         }
-      }
-    });
+      });
+    }
 
     const defaultRenderer = svg();
     if(defaultRenderer && !defaultRenderer.transformPath)
@@ -65,71 +73,75 @@ class LeafletPathDrag
 
     /**
      * Patch Canvas renderer to support transformPath
+     * (if) ensures only patched once
      */
     function TRUE_FN ()
     {
       return true;
     }
 
-    Canvas.include(
+    if (Canvas?.include && typeof Canvas.include === 'function')
     {
-      /**
-       * Removes any canvas-based transform and redraws
-       * @param {L.Path} layer
-       */
-      _resetTransformPath(layer)
+      Canvas.include(
       {
-        if(!this._containerCopy) return;
-        delete this._containerCopy;
-
-        if(layer._containsPoint_)
+        /**
+         * Removes any canvas-based transform and redraws
+         * @param {L.Path} layer
+         */
+        _resetTransformPath(layer)
         {
-          layer._containsPoint = layer._containsPoint_;
-          delete layer._containsPoint_;
-          this._requestRedraw(layer);
-        }
-      },
-      /**
-       * Applies a matrix transform to a canvas path and redraws
-       * @param {L.Path} layer
-       * @param {number[]} matrix
-       */
-      transformPath(layer, matrix)
-      {
-        const m = Browser.retina ? 2 : 1;
-        const bounds = this._bounds;
-        const size = bounds.getSize();
-        const pos = bounds.min;
+          if(!this._containerCopy) return;
+          delete this._containerCopy;
 
-        if(!this._containerCopy)
+          if(layer._containsPoint_)
+          {
+            layer._containsPoint = layer._containsPoint_;
+            delete layer._containsPoint_;
+            this._requestRedraw(layer);
+          }
+        },
+        /**
+         * Applies a matrix transform to a canvas path and redraws
+         * @param {L.Path} layer
+         * @param {number[]} matrix
+         */
+        transformPath(layer, matrix)
         {
-          this._containerCopy = document.createElement('canvas');
-          const copyCtx = this._containerCopy.getContext('2d');
-          this._containerCopy.width = m * size.x;
-          this._containerCopy.height = m * size.y;
-          this._removePath(layer);
-          this._redraw();
-          copyCtx.translate(m * bounds.min.x, m * bounds.min.y);
-          copyCtx.drawImage(this._container, 0, 0);
-          this._initPath(layer);
-          layer._containsPoint_ = layer._containsPoint;
-          layer._containsPoint = TRUE_FN;
-        }
+          const m = Browser.retina ? 2 : 1;
+          const bounds = this._bounds;
+          const size = bounds.getSize();
+          const pos = bounds.min;
 
-        const ctx = this._ctx;
-        ctx.save();
-        ctx.clearRect(pos.x, pos.y, size.x * m, size.y * m);
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.restore();
-        ctx.save();
-        ctx.drawImage(this._containerCopy, 0, 0, size.x, size.y);
-        ctx.transform(...matrix);
-        this._drawing = true;
-        layer._updatePath();
-        this._drawing = false;
-        ctx.restore();
-      }
-    });
+          if(!this._containerCopy)
+          {
+            this._containerCopy = document.createElement('canvas');
+            const copyCtx = this._containerCopy.getContext('2d');
+            this._containerCopy.width = m * size.x;
+            this._containerCopy.height = m * size.y;
+            this._removePath(layer);
+            this._redraw();
+            copyCtx.translate(m * bounds.min.x, m * bounds.min.y);
+            copyCtx.drawImage(this._container, 0, 0);
+            this._initPath(layer);
+            layer._containsPoint_ = layer._containsPoint;
+            layer._containsPoint = TRUE_FN;
+          }
+
+          const ctx = this._ctx;
+          ctx.save();
+          ctx.clearRect(pos.x, pos.y, size.x * m, size.y * m);
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.restore();
+          ctx.save();
+          ctx.drawImage(this._containerCopy, 0, 0, size.x, size.y);
+          ctx.transform(...matrix);
+          this._drawing = true;
+          layer._updatePath();
+          this._drawing = false;
+          ctx.restore();
+        }
+      });
+    }
 
     /**
      * Patch L.Path with transform behavior and click suppression on drag

@@ -2,6 +2,8 @@
 
 Refactored for Leaflet >= 1.7
 
+Dropped any and all ie support
+
 Rebuilt the Leaflet.Path.Drag plugin with a class based approach to work seamlessly with modern Leaflet (1.7+). Supports both SVG and Canvas, handles multiple drags cleanly without geometry drift or jump-back, and updates path coordinates properly. Added transform flushing, internal geometry syncing, and full renderer patching so it's stable across all layers. Exportable as either ESM or IIFE. 
 
 Started adding JSDoc comments to make it clearer.
@@ -56,9 +58,107 @@ polygon
     });
 ```
 
+### SVG Support
+```JavaScript
+
+const map = (window.map = new L.Map('map', {
+    renderer: L.svg(),
+    // X renderer: L.Canvas(), // Don't Do this
+    preferCanvas: false // Ensure SVG is preferred
+}).setView([22.42658, 114.1952], 11));
+
+// X const renderer = new L.Canvas(); // Don't Do this
+const renderer = new L.svg();
+```
+
 ```javascript
 polygon.dragging.disable();
 ```
+
+## Leaflet.Path.Drag Events
+
+Leaflet.Path.Drag introduces a drag handler for `L.Path`-based layers (polylines, polygons, etc.). It supports the following drag-related events:
+
+### Events Emitted
+
+#### `dragstart`
+
+Fired once when the user begins dragging a shape.
+
+##### Example
+
+```javascript
+polyline.on('dragstart', function (e)
+{
+  console.log('Drag started', e);
+});
+```
+
+---
+
+#### `predrag`
+
+Fired on every mousemove/touchmove during dragging **before** the transform is visually applied. Can be used for constraints or custom transform logic.
+
+##### Example
+
+```javascript
+polygon.on('predrag', function (e)
+{
+  console.log('Pre-drag logic triggered');
+});
+```
+
+---
+
+#### `drag`
+
+Fired after each transform matrix update is applied. Useful for updating side effects like connected lines or tooltips.
+
+##### Example
+
+```javascript
+layer.on('drag', function (e)
+{
+  console.log('Dragging', e);
+});
+```
+
+---
+
+#### `dragend`
+
+Fired once at the end of a drag operation. Contains a `distance` field that estimates how far the path was moved in screen pixels.
+
+##### Example
+
+```javascript
+polyline.on('dragend', function (e)
+{
+  console.log('Drag complete. Distance:', e.distance);
+});
+```
+
+### Notes on Leaflet.Path.Drag Events
+
+* All events provide access to the original LeafletMouseEvent or TouchEvent.
+* The layer will be brought to front automatically on `dragstart`.
+* Coordinates are updated internally via transform matrix projection and reprojection using the map's CRS.
+
+### Usage Tip
+
+To enable dragging:
+
+```javascript
+const poly = L.polygon([...], { draggable: true }).addTo(map);
+LeafletPathDrag.enable();
+```
+
+---
+
+For best performance, avoid heavy logic in `drag` or `predrag`, and defer updates to `requestAnimationFrame` where possible.
+
+---
 
 ## Development
 ```npm install```
