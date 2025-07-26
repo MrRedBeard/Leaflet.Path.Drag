@@ -10,7 +10,7 @@ export default
   output: {
     file: 'dist/leaflet_path_drag.iife.js',
     format: 'iife',
-    name: 'leaflet_path_drag',
+    name: 'LeafletPathDrag',
     banner: `/*! LeafletPathDrag v${pkg.version} */`,
     sourcemap: true,
     inlineDynamicImports: true,

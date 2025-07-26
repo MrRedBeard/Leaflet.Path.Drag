@@ -7,7 +7,7 @@
  *
  * @class LeafletPathDrag
  */
-export class LeafletPathDrag
+class LeafletPathDrag
 {
   /**
    * Apply all patches and extend Leaflet classes
@@ -526,3 +526,5 @@ export class LeafletPathDrag
     });
   }
 }
+
+export default LeafletPathDrag;

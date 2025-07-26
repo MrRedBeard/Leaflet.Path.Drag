@@ -23,7 +23,7 @@ VML matrix transform tested in IE8, it has rendering glitches, but what can you 
 <script src="path/to/leaflet/"></script>
 <script src="path/to/L.Path.Drag.js"></script>
 ...
-leaflet_path_drag.LeafletPathDrag.enable();
+LeafletPathDrag.enable();
 
 // Initialize Leaflet
 

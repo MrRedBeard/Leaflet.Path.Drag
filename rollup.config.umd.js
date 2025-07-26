@@ -12,7 +12,7 @@ export default
   output: {
     file: 'dist/leaflet_path_drag.umd.js',
     format: 'umd',
-    name: 'leaflet_path_drag', // global name for UMD consumers
+    name: 'LeafletPathDrag',
     banner: `/*! LeafletPathDrag v${pkg.version} */`,
     sourcemap: true,
     inlineDynamicImports: true,

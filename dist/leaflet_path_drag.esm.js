@@ -528,5 +528,5 @@ class LeafletPathDrag
   }
 }
 
-export { LeafletPathDrag };
+export { LeafletPathDrag as default };
 //# sourceMappingURL=leaflet_path_drag.esm.js.map

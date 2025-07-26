@@ -11,6 +11,7 @@ export default
   output: {
     file: 'dist/leaflet_path_drag.esm.js',
     format: 'esm',
+    name: 'LeafletPathDrag',
     banner: `/*! LeafletPathDrag v${pkg.version} */`,
     sourcemap: true,
     inlineDynamicImports: true,

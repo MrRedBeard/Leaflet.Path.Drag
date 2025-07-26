@@ -1,5 +1,5 @@
 /*! LeafletPathDrag v2.0.1 */
-var leaflet_path_drag = (function (exports) {
+var LeafletPathDrag = (function () {
   'use strict';
 
   /**
@@ -531,9 +531,7 @@ var leaflet_path_drag = (function (exports) {
     }
   }
 
-  exports.LeafletPathDrag = LeafletPathDrag;
+  return LeafletPathDrag;
 
-  return exports;
-
-})({});
+})();
 //# sourceMappingURL=leaflet_path_drag.iife.js.map

@@ -1,9 +1,9 @@
 /*! LeafletPathDrag v2.0.1 */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.leaflet_path_drag = {}));
-})(this, (function (exports) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.LeafletPathDrag = factory());
+})(this, (function () { 'use strict';
 
   /**
    * LeafletPathDrag
@@ -534,7 +534,7 @@
     }
   }
 
-  exports.LeafletPathDrag = LeafletPathDrag;
+  return LeafletPathDrag;
 
 }));
 //# sourceMappingURL=leaflet_path_drag.umd.js.map
